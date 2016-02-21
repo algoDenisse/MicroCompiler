@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "scanner.c"
 
-// HOLAAAAAA
+// HOLAAAA
 int main( int argc, char *argv[] )
 {
 	read_file();
