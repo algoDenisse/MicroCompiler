@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "scanner.c"
 
+// HOLAAAAAA
 int main( int argc, char *argv[] )
 {
 	open_file(); // esta en scanner.h
