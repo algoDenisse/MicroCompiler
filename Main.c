@@ -6,15 +6,13 @@
 // HOLAAAAAA
 int main( int argc, char *argv[] )
 {
-	open_file(); // esta en scanner.h
-	if (file) {
-		printf("Abri el archivo. \n");
-		read_file();
-		close_file();
-	}
-	else{
-		printf("Problema al abrir el archivo. \n");
-	}
-	
+	read_file();
+	// Leer buffer
+	//fwrite(file_buffer , 1 , len , stdout);
+	close_file();
+
+	scan();
+	free(file_buffer);
+
 	
 }

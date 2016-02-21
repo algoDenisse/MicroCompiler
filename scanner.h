@@ -7,8 +7,10 @@
 #include <stdlib.h>
 /*--Definicion de variables-----------------------------------------------------------------------------------------------*/
 FILE *file;
-int len, c, filePos;
+int len, len_token_buffer, c, filePos, charPos;
+char *file_buffer;
 char *token_buffer;
+
 
 
 /*Representa el conjunto de tipos de tokens*/
@@ -26,6 +28,8 @@ void open_file();
 
 void read_file();
 
+int get_next_char();
+
 void close_file();
 
 void buffer_char(char c);
@@ -33,3 +37,5 @@ void buffer_char(char c);
 void clear_buffer_char();
 
 token check_reserved();
+
+void scan(void);
