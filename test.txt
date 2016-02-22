@@ -1,1 +1,6 @@
-Hola treicy y denisse
+begin
+denisse := 1 + 1;
+end
+-- esto es un comentario
+write
+read

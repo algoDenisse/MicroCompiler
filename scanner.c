@@ -52,51 +52,196 @@ void close_file(){
 }
 
 void buffer_char(char c){
-	token_buffer[charPos++] = c;
-	printf("CharPos --> %d\n", charPos);
+	//Meter los caracteres al buffer hasta que encuentre un espacio en blanco.
+	token_buffer[charPos++] = c;	
 }
 
-void clear_buffer_char(){
+void clear_token_buffer(){
 	memset(token_buffer, 0, len);
+	charPos = 0;
 }
 
 token check_reserved(){
-	return END;
-}
-void scan(void){
-	int in_char, i;
-	clear_buffer_char();
+	int letter, c;
+	bool reserved;
+	//Recorrer el token buffer, revisando su primera letra
+	for(letter= 0; letter < len_tb; letter++){
+		if ( 'B'== toupper(token_buffer[letter])){
+			reserved = true;
+			for(c = 0; c < 5; c++){
+				if (begin_buffer[c] != toupper(token_buffer[letter++])){
+					reserved = false;
+					break;
+				}
+			}
+			if(reserved == true){
+				printf("1. es un BEGIN\n");
+				return BEGIN;
+			}else{
+				printf("es un ID\n");
+				return ID;
+			}
 
+			break;
+		}else if ('E' == toupper(token_buffer[letter])){
+			reserved = true;
+			for(c = 0; c < 3; c++){
+				if (end_buffer[c] != toupper(token_buffer[letter++])){
+					reserved = false;
+					break;
+				}
+			}
+			if(reserved == true){
+				printf("2. es un END\n");
+				return END;
+			}else{
+				printf("es un ID\n");
+				return ID;
+			}
+			break;
+		}else if ('W' == toupper(token_buffer[letter])){
+			reserved = true;
+			for(c = 0; c < 5; c++){
+				if (write_buffer[c] != toupper(token_buffer[letter++])){
+					reserved = false;
+					break;
+				}
+			}
+			if(reserved == true){
+				printf("3. es un WRITE\n");
+				return WRITE;
+			}else{
+				printf("es un ID\n");
+				return ID;
+			}
+			break;
+		}else if ('R' == toupper(token_buffer[letter])){
+			reserved = true;
+			for(c = 0; c < 4; c++){
+				if (read_buffer[c] != toupper(token_buffer[letter++])){
+					reserved = false;
+					break;
+				}
+			}
+			if(reserved == true){
+				printf("4. es un READ\n");
+				return READ;
+			}else{
+				printf("es un ID\n");
+				return ID;
+			}
+			break;
+		}else{
+			printf("es un ID\n");
+			return ID;
+		}
+	}
+}
+token scan(void){
+	int in_char, i;
+	clear_token_buffer();
+
+	//Si el primer caracter del file_buffer es 0, entonces el archivo esta vacio
 	if(file_buffer[0] == 0) printf("Archivo vacio.\n");
 
-	for(i = 0; i <= len; i++){
-		in_char = get_next_char();
+	//Mientras no encuentre un fin del archivo
+	while ((in_char = get_next_char()) != '\0'){ 
 		if(isspace(in_char)){
 			continue;
 		} 
 		else if (isalpha(in_char)){
+			len_tb = 0;
+			//printf("PALABRA\n" );
 			buffer_char(in_char);
+			len_tb++; // Aumenta variable que me indicara el tamanno del token buffer.
+			for (c = get_next_char(); isalnum(c) || c == '_'; c = get_next_char()){
+				buffer_char(c);
+				len_tb++;
+			}
+			filePos--; // para que no se coma el siguiente ch despues de haber llenado el buffer
+			return check_reserved();
+			//break;
 		}
+		else if (isdigit(in_char)){
+			printf("DIGITO\n");
+			buffer_char(in_char);
+			for (c = get_next_char(); isalnum(c) || c == '_'; c = get_next_char()){
+				buffer_char(c);
+			}
+			filePos--;
+			return INTLITERAL;
+		}
+		else if(in_char == '('){
+			printf("PARENTESIS DERECHO %d\n", in_char);
+			return LPAREN;
+		
+		}else if(in_char == ')'){
+			printf("PARENTESIS IZQUIERDO %d\n", in_char);
+			return RPAREN;
+
+
+		}else if(in_char == ';'){
+			printf("PUNTO Y COMMA %d\n", in_char);
+			return SEMICOLON;
+
+		}else if(in_char == ','){
+			printf("COMMA %d\n", in_char);
+			return COMMA;
+
+		}else if(in_char == '+'){
+			printf("MAS %d\n", in_char);
+			return PLUSOP;
+		}else if (in_char == ':'){
+			//Buscando a '='
+			c = get_next_char();
+			if(c == '='){
+				//break
+				printf("ASSIGNACION %d\n",in_char + c);
+				return ASSIGNOP;
+			}else{
+				printf("LEXICAL ERRORRRRRRRRRRRR%d\n", in_char);
+				break;
+			}
+
+		}else if(in_char == '-'){
+			//Buscando el inicio del comentario --
+			c = get_next_char();
+			if (c == '-'){
+				do{
+					in_char = get_next_char();
+					
+				}while (in_char != '\n'); 
+				printf("COMMENTARIO\n");
+				break;
+				//SE CAE SI NO HAY CAMBIO DE LINEA
+
+			}else{
+				printf("MENOS %d\n",in_char);
+				return MINUSOP;
+			}
+		}else{
+			printf("LEXICAL ERROR %d\n", in_char);
+			break;
+		}
+
 	}
+}
+
+void print_token_buffer(){
+	int i;
+	printf("IMPRIMIENDO TOKEN BUFFER\n");
+	//Prueba para ver que hay en el token_buffer.
 	for (i = 0; i <=len_token_buffer; i++){
 		printf("%d\n", token_buffer[i] );
 	}
+}
 
-/*	while ((in_char = get_next_char()) != EOF){
-		if(isspace(in_char)) continue;
-		else if (isalpha(in_char)){
-			//buffer_char(in_char);
-			printf("es letraaa");
-		}
+void get_tokens(){
+	read_file();
+	token ejemplo;
+	while(filePos != len){
+		ejemplo = scan();
+		printf("token %d\n", ejemplo );
+	}
 
-	} */
-//	for(i = 0; i < 4; i++){
-//		in_char = get_next_char();
-//		printf("La pos actual del file_buffer: %d\n", in_char);
-//	}
-
-	//printf(" Dato ingresado %d\n", in_char ); 
-	//if (feof(in_char)){
-
-	//}
 }

@@ -6,13 +6,15 @@
 // HOLAAAA
 int main( int argc, char *argv[] )
 {
-	read_file();
+	int i;
+	get_tokens();
 	// Leer buffer
-	//fwrite(file_buffer , 1 , len , stdout);
+	
 	close_file();
 
-	scan();
 	free(file_buffer);
+	free(token_buffer);
 
-	
+	//fwrite( reserved_words_array, 1 , 4, stdout);
+
 }
