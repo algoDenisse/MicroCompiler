@@ -2,6 +2,7 @@
 #include <string.h> /* memset */
 #include <stdlib.h>
 #include "scanner.c"
+#include "parser.c"
 
 // HOLAAAA
 int main( int argc, char *argv[] )
@@ -16,5 +17,6 @@ int main( int argc, char *argv[] )
 	free(token_buffer);
 
 	//fwrite( reserved_words_array, 1 , 4, stdout);
-
+	 // prueba de compilacion
+	statement();
 }

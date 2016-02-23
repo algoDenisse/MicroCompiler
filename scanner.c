@@ -137,7 +137,7 @@ token check_reserved(){
 		}
 	}
 }
-token scan(void){
+token scanner(void){
 	int in_char, i;
 	clear_token_buffer();
 
@@ -199,7 +199,7 @@ token scan(void){
 				printf("ASSIGNACION %d\n",in_char + c);
 				return ASSIGNOP;
 			}else{
-				printf("LEXICAL ERRORRRRRRRRRRRR%d\n", in_char);
+				lexical_error(in_char);
 				break;
 			}
 
@@ -220,13 +220,16 @@ token scan(void){
 				return MINUSOP;
 			}
 		}else{
-			printf("LEXICAL ERROR %d\n", in_char);
+			lexical_error(in_char);
 			break;
 		}
 
 	}
 }
 
+void lexical_error(int character){
+	printf("LEXICAL ERROR %d\n", character);
+}
 void print_token_buffer(){
 	int i;
 	printf("IMPRIMIENDO TOKEN BUFFER\n");
@@ -240,7 +243,7 @@ void get_tokens(){
 	read_file();
 	token ejemplo;
 	while(filePos != len){
-		ejemplo = scan();
+		ejemplo = scanner();
 		printf("token %d\n", ejemplo );
 	}
 

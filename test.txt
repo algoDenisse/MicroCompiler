@@ -1,6 +1,1 @@
-begin
-denisse := 1 + 1;
-end
--- esto es un comentario
-write
-read
+1 + 1 = 2
