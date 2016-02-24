@@ -8,9 +8,14 @@
 int main( int argc, char *argv[] )
 {
 	int i;
-	get_tokens();
+	read_file();
+
+	//get_tokens();
 	// Leer buffer
-	
+	next_token();
+	system_goal();
+	//match(INTLITERAL);
+	//match(BEGIN);
 	close_file();
 
 	free(file_buffer);
@@ -18,5 +23,5 @@ int main( int argc, char *argv[] )
 
 	//fwrite( reserved_words_array, 1 , 4, stdout);
 	 // prueba de compilacion
-	statement();
+	//statement();
 }

@@ -75,10 +75,10 @@ token check_reserved(){
 				}
 			}
 			if(reserved == true){
-				printf("1. es un BEGIN\n");
+				//printf("1. es un BEGIN\n");
 				return BEGIN;
 			}else{
-				printf("es un ID\n");
+				//printf("es un ID\n");
 				return ID;
 			}
 
@@ -92,10 +92,10 @@ token check_reserved(){
 				}
 			}
 			if(reserved == true){
-				printf("2. es un END\n");
+				//printf("2. es un END\n");
 				return END;
 			}else{
-				printf("es un ID\n");
+				//printf("es un ID\n");
 				return ID;
 			}
 			break;
@@ -108,10 +108,10 @@ token check_reserved(){
 				}
 			}
 			if(reserved == true){
-				printf("3. es un WRITE\n");
+				//printf("3. es un WRITE\n");
 				return WRITE;
 			}else{
-				printf("es un ID\n");
+				//printf("es un ID\n");
 				return ID;
 			}
 			break;
@@ -124,15 +124,15 @@ token check_reserved(){
 				}
 			}
 			if(reserved == true){
-				printf("4. es un READ\n");
+				//printf("4. es un READ\n");
 				return READ;
 			}else{
-				printf("es un ID\n");
+				//printf("es un ID\n");
 				return ID;
 			}
 			break;
 		}else{
-			printf("es un ID\n");
+			//printf("es un ID\n");
 			return ID;
 		}
 	}
@@ -163,7 +163,7 @@ token scanner(void){
 			//break;
 		}
 		else if (isdigit(in_char)){
-			printf("DIGITO\n");
+			//printf("DIGITO\n");
 			buffer_char(in_char);
 			for (c = get_next_char(); isalnum(c) || c == '_'; c = get_next_char()){
 				buffer_char(c);
@@ -172,31 +172,31 @@ token scanner(void){
 			return INTLITERAL;
 		}
 		else if(in_char == '('){
-			printf("PARENTESIS DERECHO %d\n", in_char);
+			//printf("PARENTESIS DERECHO %d\n", in_char);
 			return LPAREN;
 		
 		}else if(in_char == ')'){
-			printf("PARENTESIS IZQUIERDO %d\n", in_char);
+			//printf("PARENTESIS IZQUIERDO %d\n", in_char);
 			return RPAREN;
 
 
 		}else if(in_char == ';'){
-			printf("PUNTO Y COMMA %d\n", in_char);
+			//printf("PUNTO Y COMMA %d\n", in_char);
 			return SEMICOLON;
 
 		}else if(in_char == ','){
-			printf("COMMA %d\n", in_char);
+			//printf("COMMA %d\n", in_char);
 			return COMMA;
 
 		}else if(in_char == '+'){
-			printf("MAS %d\n", in_char);
+			//printf("MAS %d\n", in_char);
 			return PLUSOP;
 		}else if (in_char == ':'){
 			//Buscando a '='
 			c = get_next_char();
 			if(c == '='){
 				//break
-				printf("ASSIGNACION %d\n",in_char + c);
+				//printf("ASSIGNACION %d\n",in_char + c);
 				return ASSIGNOP;
 			}else{
 				lexical_error(in_char);
@@ -211,12 +211,12 @@ token scanner(void){
 					in_char = get_next_char();
 					
 				}while (in_char != '\n'); 
-				printf("COMMENTARIO\n");
+				//printf("COMMENTARIO\n");
 				break;
 				//SE CAE SI NO HAY CAMBIO DE LINEA
 
 			}else{
-				printf("MENOS %d\n",in_char);
+				//printf("MENOS %d\n",in_char);
 				return MINUSOP;
 			}
 		}else{
