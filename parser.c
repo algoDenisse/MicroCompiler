@@ -2,12 +2,10 @@
 
 
 token next_token(void){
-	//token t;
 	current_token= scanner();
-	printf("\nEl current Token es: %d", current_token);
+	printf("\nEl current Token es: %s\n", get_token_name(current_token));
 	return current_token;
-	//token t;
-	//return t;
+
 }
 
 void match(token t){
@@ -15,12 +13,10 @@ void match(token t){
 	if(current_token == t){
 		printf("SI Matcheo!\n");
 		current_token = next_token();
-		//return 1;
-
 	}
 	else{
 		sintax_error(t);
-		//return 0;
+		exit(0);
 	}
 
 }
@@ -29,11 +25,8 @@ void sintax_error(token t){
 	// revisar que se esperaba 
 	//Condicionales de acuerdo al token 
 	//Si id , esperaba .... 
-	printf("Sintax error =%d\n",t);
-	if(t==ID){
-		
-	}
 
+	printf("Sintax error, expecting %s\n",get_token_name(t));
 }
 
 /*________________FUNCIONES PRINCIPALES DEL PARSER______-*/
@@ -43,7 +36,7 @@ void system_goal(void){
 
 	//macth() debe llamar al scanner para obtener el sig
 	//token . Si todo correcto guarda en variable global current_token
-	//match(SCANEOF);
+	match(SCANEOF);
 }
 
 void program(void){
@@ -78,7 +71,8 @@ void statement(void){
 		case ID:
 			/*<statement> ::= ID := <expresion>;*/
 			match(ID);match(ASSIGNOP);
-			//expression();match(SEMICOLON);
+			//expression();
+			match(SEMICOLON);
 			
 			break;
 		case READ:
@@ -162,5 +156,38 @@ void primary(void){
 			break;
 
 
+	}
+}
+
+const char * get_token_name(token t){
+	switch(t){
+		case BEGIN:
+			return "BEGIN";
+		case END:
+			return "END";
+		case READ:
+			return "READ";
+		case WRITE:
+			return "WRITE";
+		case ID:
+			return "ID";
+		case INTLITERAL:
+			return "INTLITERAL";
+		case LPAREN:
+			return "LPAREN";
+		case RPAREN:
+			return "RPAREN";
+		case SEMICOLON:
+			return "SEMICOLON";
+		case COMMA:
+			return "COMMA";
+		case ASSIGNOP:
+			return "ASSIGNOP";
+		case PLUSOP:
+			return "PLUSOP";
+		case MINUSOP:
+			return "MINUSOP";
+		case SCANEOF:
+			return "SCANEOF";
 	}
 }

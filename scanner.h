@@ -8,7 +8,7 @@
 #include "global.h" /*datos globales*/
 /*--Definicion de variables-----------------------------------------------------------------------------------------------*/
 FILE *file;
-int len, len_token_buffer, c, filePos, charPos,len_tb;
+int len, len_token_buffer, c, comment_char, filePos, charPos,len_tb;
 char *file_buffer;
 char *token_buffer;
 char begin_buffer[5] = "BEGIN";

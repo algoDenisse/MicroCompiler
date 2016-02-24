@@ -1,1 +1,1 @@
-BEGIN ID 1 + 1 = 2
+begin hola := ; end

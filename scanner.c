@@ -29,7 +29,8 @@ void read_file(){
 		// Llena buffer con los ch del archivo
 		while ((c = getc(file)) != EOF)
 	       	file_buffer[filePos++] = c;		
-	  	file_buffer[filePos++] = '\0'; //Agreagarle final de texto
+	  	//file_buffer[filePos++] = '\0'; //Agreagarle final de texto
+	    file_buffer[filePos++] = EOF;
 	  	// Inicializamos la posicion incial del file_buffer
 	  	filePos = 0;
 	  	// Inicializamos la posicion incial del token_buffer
@@ -142,10 +143,10 @@ token scanner(void){
 	clear_token_buffer();
 
 	//Si el primer caracter del file_buffer es 0, entonces el archivo esta vacio
-	if(file_buffer[0] == 0) printf("Archivo vacio.\n");
+	if(file_buffer[0] == EOF) printf("Archivo vacio.\n");
 
 	//Mientras no encuentre un fin del archivo
-	while ((in_char = get_next_char()) != '\0'){ 
+	while ((in_char = get_next_char()) != EOF){ 
 		if(isspace(in_char)){
 			continue;
 		} 
@@ -208,10 +209,11 @@ token scanner(void){
 			c = get_next_char();
 			if (c == '-'){
 				do{
-					in_char = get_next_char();
+					comment_char = get_next_char();
+					printf("get_next_char = %d\n", comment_char);
 					
-				}while (in_char != '\n'); 
-				//printf("COMMENTARIO\n");
+				}while (comment_char != '\n'); 
+				printf("COMMENTARIO\n");
 				break;
 				//SE CAE SI NO HAY CAMBIO DE LINEA
 
@@ -225,6 +227,7 @@ token scanner(void){
 		}
 
 	}
+	if ((in_char = get_next_char()) == EOF) return SCANEOF;
 }
 
 void lexical_error(int character){

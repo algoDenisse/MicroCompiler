@@ -21,3 +21,5 @@ token next_token();
 void match(token t);
 void sintax_error(token t);
 token current_token;
+
+const char * get_token_name(token t);
