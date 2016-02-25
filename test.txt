@@ -1,1 +1,1 @@
-begin id := ; end
+begin A :=  1 + 1; end

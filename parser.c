@@ -17,7 +17,7 @@ void match(token t){
 	}
 	else{
 		sintax_error(t);
-		exit(0);
+		
 	}
 
 }
@@ -28,6 +28,7 @@ void sintax_error(token t){
 	//Si id , esperaba .... 
 
 	printf("Sintax error, expecting %s\n",get_token_name(t));
+	exit(0);
 }
 
 /*________________FUNCIONES PRINCIPALES DEL PARSER______-*/
@@ -73,7 +74,7 @@ void statement(void){
 		case ID:
 			/*<statement> ::= ID := <expresion>;*/
 			match(ID);match(ASSIGNOP);
-			//expression();
+			expression();
 			match(SEMICOLON);
 			
 			break;
@@ -115,7 +116,7 @@ void expression(void){
 	*				{<add op><primary>}
 	*/
 	primary();
-	for(t=next_token();t==PLUSOP || t==MINUSOP; t=next_token()){
+	for(t=current_token;t==PLUSOP || t==MINUSOP; t=next_token()){
 		add_op();
 		primary();
 	}
@@ -130,7 +131,7 @@ void expr_list(void){
 	}
 }
 void add_op(void){
-	token tok = next_token();
+	token tok = current_token;
 	/*<addop>::PLUSOP | MINUSOP*/
 	if(tok == PLUSOP || tok==MINUSOP)
 		match(tok);
@@ -138,7 +139,7 @@ void add_op(void){
 		sintax_error(tok);
 }
 void primary(void){
-	token tok=next_token();
+	token tok= current_token;
 	switch(tok){
 		case LPAREN:
 			/*<primary>::= {<expresion>}*/
