@@ -14,7 +14,7 @@ int main( int argc, char *argv[] )
 	//scanner();
 	//get_tokens();
 	// Leer buffer
-	next_token();
+	nextev_token = scanner(); //para inicializarlo
 	system_goal();
 	//match(INTLITERAL);
 	//match(BEGIN);

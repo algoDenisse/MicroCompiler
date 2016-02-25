@@ -2,23 +2,32 @@
 
 
 token next_token(void){
-	nextev_token= scanner();
-	if (nextev_token == -1) nextev_token = scanner();
-	printf("\nNext token a evaluar: %d\n", nextev_token); 
-	return nextev_token;
+	return current_token;
+	// nextev_token= scanner();
+	// if (nextev_token == -1) nextev_token = scanner();
+	// printf("\nNext token a evaluar: %d\n", nextev_token); 
+	// return nextev_token;
 
 }
 
 void match(token t){
 	
-	if(current_token == t){
+	printf("\nEstoy evaluando: %d\n", nextev_token); 
+	if(nextev_token == t){
 		printf("SI Matcheo!\n");
-		current_token = next_token();
-	}
-	else{
-		sintax_error(t);
+		nextev_token = scanner();
+		if (nextev_token == -1) nextev_token = scanner();
+		current_token = nextev_token;
 		
 	}
+	// if(current_token == t){
+	// 	printf("SI Matcheo!\n");
+	// 	current_token = next_token();
+	// }
+	else{
+	 	sintax_error(t);
+		
+	 }
 
 }
 
@@ -68,7 +77,7 @@ void statement_list(void){
 }
 
 void statement(void){
-	token tok= current_token;
+	token tok= next_token();
 
 	switch(tok){
 		case ID:
@@ -80,17 +89,17 @@ void statement(void){
 			break;
 		case READ:
 		/*<statement> ::= READ(<id_list>);*/
-			// match(READ);match(LPAREN);
-			// id_list();match(RPAREN);
-			// match(SEMICOLON);
-			printf("\nSoy Read!\n");
+			match(READ);match(LPAREN);
+			id_list();match(RPAREN);
+			match(SEMICOLON);
+			//printf("\nSoy Read!\n");
 			break;
 		case WRITE:
 		/*<statement>::= WRITE(<expr list>);*/
-			// match(WRITE);match(LPAREN);
-			// expr_list();match(RPAREN);
-			// match(SEMICOLON);
-		    printf("\nSoy WRITE!\n");
+			match(WRITE);match(LPAREN);
+			expr_list();match(RPAREN);
+			match(SEMICOLON);
+		    //printf("\nSoy WRITE!\n");
 			break;
 		default:
 			sintax_error(tok);
@@ -116,7 +125,7 @@ void expression(void){
 	*				{<add op><primary>}
 	*/
 	primary();
-	for(t=current_token;t==PLUSOP || t==MINUSOP; t=next_token()){
+	for(t=next_token();t==PLUSOP || t==MINUSOP; t=next_token()){
 		add_op();
 		primary();
 	}
@@ -131,7 +140,7 @@ void expr_list(void){
 	}
 }
 void add_op(void){
-	token tok = current_token;
+	token tok = next_token();
 	/*<addop>::PLUSOP | MINUSOP*/
 	if(tok == PLUSOP || tok==MINUSOP)
 		match(tok);
@@ -139,7 +148,7 @@ void add_op(void){
 		sintax_error(tok);
 }
 void primary(void){
-	token tok= current_token;
+	token tok= next_token();
 	switch(tok){
 		case LPAREN:
 			/*<primary>::= {<expresion>}*/
