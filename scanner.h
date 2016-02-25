@@ -9,7 +9,6 @@
 /*--Definicion de variables-----------------------------------------------------------------------------------------------*/
 FILE *file;
 int len, len_token_buffer, c, comment_char, filePos, charPos,len_tb;
-char *file_buffer;
 char *token_buffer;
 char begin_buffer[5] = "BEGIN";
 char end_buffer[3] = "END";
@@ -30,8 +29,6 @@ extern token scanner(void); // Produce un stream de representaciones de tokes
 void open_file();
 
 void read_file();
-
-int get_next_char();
 
 void close_file();
 

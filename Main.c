@@ -10,6 +10,8 @@ int main( int argc, char *argv[] )
 	int i;
 	read_file();
 
+
+	//scanner();
 	//get_tokens();
 	// Leer buffer
 	next_token();
@@ -18,7 +20,7 @@ int main( int argc, char *argv[] )
 	//match(BEGIN);
 	close_file();
 
-	free(file_buffer);
+	//free(file_buffer);
 	free(token_buffer);
 
 	//fwrite( reserved_words_array, 1 , 4, stdout);

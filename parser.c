@@ -2,9 +2,10 @@
 
 
 token next_token(void){
-	current_token= scanner();
-	printf("\nEl current Token es: %s\n", get_token_name(current_token));
-	return current_token;
+	nextev_token= scanner();
+	if (nextev_token == -1) nextev_token = scanner();
+	printf("\nNext token a evaluar: %d\n", nextev_token); 
+	return nextev_token;
 
 }
 
@@ -37,6 +38,7 @@ void system_goal(void){
 	//macth() debe llamar al scanner para obtener el sig
 	//token . Si todo correcto guarda en variable global current_token
 	match(SCANEOF);
+
 }
 
 void program(void){

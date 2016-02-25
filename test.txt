@@ -1,1 +1,1 @@
-begin hola := ; end
+begin id := ; end
