@@ -1,5 +1,5 @@
 #include "parser.h"
-
+//#include "translator.c"
 
 token next_token(void){
 	return current_token;
@@ -43,19 +43,21 @@ void sintax_error(token t){
 /*________________FUNCIONES PRINCIPALES DEL PARSER______-*/
 void system_goal(void){
 	/*<system goal> ::= <program> SCANEOF*/
+	
 	program();
 
 	//macth() debe llamar al scanner para obtener el sig
 	//token . Si todo correcto guarda en variable global current_token
-	match(SCANEOF);
+	//match(SCANEOF);
 
 }
 
 void program(void){
 	/* <program> ::= BEGIN <statement list> END*/
+	start();// Inician las funciones de rutinas semanticas
 	match(BEGIN);
 	statement_list();
-	match(END);
+	//match(END);
 }
 
 
@@ -63,7 +65,7 @@ void statement_list(void){
 	/*
 	*<statement list> ::= <statement>{<statement>}*/
 	statement();
-	while(true){
+	/*while(true){
 		switch(next_token()){
 			case ID:
 			case READ:
@@ -73,19 +75,26 @@ void statement_list(void){
 			default:
 				return;
 		}
-	}
+	}*/
 }
 
 void statement(void){
 	token tok= next_token();
+	expr_rec result; //guarda el resultado de analizar el ID semanticamente.
 
 	switch(tok){
 		case ID:
 			/*<statement> ::= ID := <expresion>;*/
-			match(ID);match(ASSIGNOP);
+			strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
+			match(ID);
+			result = process_id();
+			printf("Lo que devuelve el process_id = %s + %d + %d\n", result.name, result.val, result.kind);
+			match(ASSIGNOP);
+			/*
+
 			expression();
 			match(SEMICOLON);
-			
+			*/
 			break;
 		case READ:
 		/*<statement> ::= READ(<id_list>);*/
@@ -202,4 +211,79 @@ const char * get_token_name(token t){
 		case SCANEOF:
 			return "SCANEOF";
 	}
+}
+
+
+// Translation Operations
+
+void open_outputFile(){
+	output_file = fopen ("output_file.txt","w+");
+}
+
+void close_outputFile(){
+	fclose(output_file);
+}
+
+void start(void){
+	/*Semantic Initialization , none needed*/
+	//printf("%s\n","hola k ace" );
+}
+
+void finish(void){
+	generate("Halt","","","");
+}
+
+void ident(){
+	// no sabemos que hace
+}
+
+expr_rec process_id(void){
+	printf("voy por aqui en el process_id\n");
+	expr_rec t;
+	/*Declare id and build a 
+	*corresponding semantic record
+	*/
+	check_id(previous_tokenbuffer);
+	t.kind = IDEXPR;
+	strcpy(t.name,previous_tokenbuffer);
+	return t;
+
+}
+
+void check_id(string s){
+	if(! lookup(s)){
+		enter(s);
+		generate("Declare", s, "Integer", "");
+	}
+}
+
+bool lookup(string s){
+	printf("vOY por el LOOKUP\n");
+	int i;
+	for(i = 0; i < symTable_count; i++){
+		if(strcmp(symbol_table[i],s) == 0){
+			return true;
+		}
+		i++;
+	}
+	return false;	
+}
+
+void enter(string s){
+	strcpy(symbol_table[symTable_count], s);
+	symTable_count++;
+}
+
+void generate(string op1,string op2,string op3,string op4){
+	if((op1 == "Declare") || (op1 == "Store")){
+		fprintf(output_file,"%s %s,%s %s\n" ,op1,op2,op3,op4);
+	}
+	else{
+		fprintf(output_file,"%s %s,%s,%s\n" ,op1,op2,op3,op4);
+	}
+
+}
+
+void extract(){
+	
 }

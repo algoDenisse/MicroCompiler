@@ -14,7 +14,7 @@ void read_file(){
 	open_file();
 	if (file){
 		len = ftell(file);
-		token_buffer= malloc(sizeof(char) *(len+1));
+		//token_buffer= malloc(sizeof(char) *(len+1));
 	}
 	else{
 		printf("Problema al abrir el archivo\n");
@@ -33,7 +33,7 @@ void buffer_char(char c){
 }
 
 void clear_token_buffer(){
-	memset(token_buffer, 0, len);
+	memset(token_buffer, 0, 5);
 	charPos = 0;
 }
 

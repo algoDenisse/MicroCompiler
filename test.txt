@@ -1,1 +1,1 @@
-begin A :=  1 + 1; end
+begin A := 1;end

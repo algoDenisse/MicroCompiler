@@ -2,18 +2,7 @@
 #include <stdio.h>
 #include "translator.h"
 
-char *symbols[9]={
-	
-};
 
-void start(void){
-	/*Semantic Initialization , none needed*/
-	printf("%s\n",symbols[1] );
-}
-
-void finish(void){
-	generate("Halt","","","");
-}
 
 // void assign(expr_rec target,expr_rec source){
 // 	generate("Store", extract(source),target.name,"");
@@ -46,17 +35,7 @@ void finish(void){
 // 	generate("READ",in_var.name,"INTEGER","");
 // }
 
-// expr_rec process_id(void){
-// 	expr_rec t;
-// 	/*Declare id and build a 
-// 	*corresponding semantic record
-// 	*/
-// 	check_id(token_buffer);
-// 	t.kind = IDEXPR;
-// 	strcpy(t.name,token_buffer);
-// 	return t;
 
-// }
 // expr_rec process_literal(void){
 // 	expr_rec t;
 // 	/*
@@ -72,12 +51,3 @@ void finish(void){
 
 // }
 
-
-void generate(){
-
-
-}
-
-void extract(){
-	
-}
