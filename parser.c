@@ -3,27 +3,15 @@
 
 token next_token(void){
 	return current_token;
-	// nextev_token= scanner();
-	// if (nextev_token == -1) nextev_token = scanner();
-	// printf("\nNext token a evaluar: %d\n", nextev_token); 
-	// return nextev_token;
-
 }
 
 void match(token t){
-	
-	printf("\nEstoy evaluando: %d\n", nextev_token); 
 	if(nextev_token == t){
-		printf("SI Matcheo!\n");
 		nextev_token = scanner();
 		if (nextev_token == -1) nextev_token = scanner();
 		current_token = nextev_token;
 		
 	}
-	// if(current_token == t){
-	// 	printf("SI Matcheo!\n");
-	// 	current_token = next_token();
-	// }
 	else{
 	 	sintax_error(t);
 		
@@ -81,18 +69,20 @@ void statement_list(void){
 void statement(void){
 	token tok= next_token();
 	expr_rec result; //guarda el resultado de analizar el ID semanticamente.
-
+	expr_rec p_expr;// parametro de la funcion expression
 	switch(tok){
 		case ID:
 			/*<statement> ::= ID := <expresion>;*/
 			strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
 			match(ID);
 			result = process_id();
-			printf("Lo que devuelve el process_id = %s + %d + %d\n", result.name, result.val, result.kind);
+			printf("Lo que devuelve el process_id nombre = %s valor = %d tipo = %d\n", result.name, result.val, result.kind);
 			match(ASSIGNOP);
+			expression(&p_expr); // Le mado la direccion de la variable
+			//AQUI ESTAMOS
 			/*
 
-			expression();
+			
 			match(SEMICOLON);
 			*/
 			break;
@@ -127,50 +117,66 @@ void id_list(void){
 	}
 }
 
-void expression(void){
-	token t;
-	/*
-	* <expresion> ::= <primary>
-	*				{<add op><primary>}
-	*/
-	primary();
-	for(t=next_token();t==PLUSOP || t==MINUSOP; t=next_token()){
-		add_op();
-		primary();
-	}
 
+void expression (expr_rec *result){
+	expr_rec left_operand, right_operand;
+	op_rec op;
+    primary (&  left_operand);
+    printf("El valor del LEFT operand es nombre = %s  valor = %d tipo = %d\n", left_operand.name, left_operand.val, left_operand.kind);
+	while (next_token() == PLUSOP || next_token() == MINUSOP){
+		add_op (& op); 
+		printf("El valor del OPERATOR es %d\n", op.operator);
+		primary (& right_operand);
+		printf("El valor del RIHT operand es nombre = %s  valor = %d tipo = %d\n", right_operand.name, right_operand.val, right_operand.kind);
+		//left_operand = gen_infix (left_operand, op, right_operand);
+	}
+	*result = left_operand; 
 }
-void expr_list(void){
+
+
+void expr_list(){
 	/*<expr list>::=<expresion>{ ,<expresion>]*/
-	expression();
+	expr_rec result;
+	expression(&result);
 	while(next_token() == COMMA){
 		match(COMMA);
-		expression();
+		expression(&result);
 	}
 }
-void add_op(void){
+void add_op(op_rec* p_operand){
 	token tok = next_token();
 	/*<addop>::PLUSOP | MINUSOP*/
-	if(tok == PLUSOP || tok==MINUSOP)
+	if(tok == PLUSOP || tok==MINUSOP){
+		previous_currentToken = current_token; // porque el match me cambia el current token
 		match(tok);
-	else
+		*p_operand = process_op();
+	}else{
 		sintax_error(tok);
+	}
 }
-void primary(void){
+
+void primary(expr_rec* p_operand){
+	expr_rec result;
 	token tok= next_token();
 	switch(tok){
 		case LPAREN:
 			/*<primary>::= {<expresion>}*/
-			match(LPAREN); expression();
+			match(LPAREN);
+			expression(&result);
+			*p_operand = result;
 			match(RPAREN);
 			break;
 		case ID:
 			/*<primary>::= ID*/
+			strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
 			match(ID);
+			*p_operand = process_id();
 			break;
 		case INTLITERAL:
 			/*<primary>::=INTLITERAL*/
+			strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
 			match(INTLITERAL);
+			*p_operand = process_literal();
 			break;
 		default:
 			sintax_error(tok);
@@ -238,7 +244,6 @@ void ident(){
 }
 
 expr_rec process_id(void){
-	printf("voy por aqui en el process_id\n");
 	expr_rec t;
 	/*Declare id and build a 
 	*corresponding semantic record
@@ -250,6 +255,27 @@ expr_rec process_id(void){
 
 }
 
+expr_rec process_literal(void){
+	expr_rec t;
+	/*Convert literal to a numeric representation and build semantic record*/
+	t.kind = LITERALEXPR;
+	(void) sscanf (previous_tokenbuffer,"%d",& t.val);
+
+	return t; 
+
+}
+
+op_rec process_op (void){
+/*Produce operator descriptor*/
+	op_rec o;
+	if (previous_currentToken == PLUSOP) 
+		o.operator = PLUS;
+	else
+		o.operator = MINUS;
+	return o; 
+}
+
+
 void check_id(string s){
 	if(! lookup(s)){
 		enter(s);
@@ -258,7 +284,6 @@ void check_id(string s){
 }
 
 bool lookup(string s){
-	printf("vOY por el LOOKUP\n");
 	int i;
 	for(i = 0; i < symTable_count; i++){
 		if(strcmp(symbol_table[i],s) == 0){
