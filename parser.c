@@ -37,7 +37,8 @@ void system_goal(void){
 
 	//macth() debe llamar al scanner para obtener el sig
 	//token . Si todo correcto guarda en variable global current_token
-	//match(SCANEOF);
+	match(SCANEOF);
+	finish();
 
 }
 
@@ -46,7 +47,7 @@ void program(void){
 	start();// Inician las funciones de rutinas semanticas
 	match(BEGIN);
 	statement_list();
-	//match(END);
+	match(END);
 }
 
 
@@ -54,7 +55,7 @@ void statement_list(void){
 	/*
 	*<statement list> ::= <statement>{<statement>}*/
 	statement();
-	/*while(true){
+	while(true){
 		switch(next_token()){
 			case ID:
 			case READ:
@@ -64,7 +65,7 @@ void statement_list(void){
 			default:
 				return;
 		}
-	}*/
+	}
 }
 
 void statement(void){
@@ -81,12 +82,7 @@ void statement(void){
 			match(ASSIGNOP);
 			expression(&p_expr); // Le mado la direccion de la variable
 			assign(result,p_expr);
-			//AQUI ESTAMOS
-			/*
-
-			
 			match(SEMICOLON);
-			*/
 			break;
 		case READ:
 		/*<statement> ::= READ(<id_list>);*/
@@ -123,14 +119,41 @@ void assign (expr_rec result, expr_rec p_expr){
 
 void id_list(void){
 	/* <id_list> ::= ID{ ,ID}*/
+	expr_rec result;
+	strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
 	match(ID);
+	strcpy(result.name, previous_tokenbuffer);
 	while(next_token() == COMMA){
+		strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
 		match(COMMA);
+		strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
 		match(ID);
-
+		strcpy(result.name, previous_tokenbuffer);
+		read_id(result);
 	}
 }
 
+void read_id (expr_rec in_var){ 
+ /*Generate code for read*/
+ generate ("Read",in_var.name,"Integer","");
+
+}
+void write_expr (expr_rec out_expr){
+ 
+ generate ("Write", out_expr.name, "Integer", ""); 
+}
+
+void expr_list(void){
+	/*<expr list>::=<expresion>{ ,<expresion>]*/
+	expr_rec result;
+	expression(&result);
+	write_expr(result);
+	while(next_token() == COMMA){
+		match(COMMA);
+		expression(&result);
+		write_expr(result);
+	}
+}
 
 void expression (expr_rec *result){
 	expr_rec left_operand, right_operand;
@@ -148,15 +171,7 @@ void expression (expr_rec *result){
 }
 
 
-void expr_list(){
-	/*<expr list>::=<expresion>{ ,<expresion>]*/
-	expr_rec result;
-	expression(&result);
-	while(next_token() == COMMA){
-		match(COMMA);
-		expression(&result);
-	}
-}
+
 void add_op(op_rec* p_operand){
 	token tok = next_token();
 	/*<addop>::PLUSOP | MINUSOP*/
@@ -317,6 +332,8 @@ void generate(string op1,string op2,string op3,string op4){
 	printf("VOY A ESCRIBIRRRR\n");
 	if((op1 == "Declare") || (op1 == "Store")){
 		fprintf(output_file,"%s %s,%s %s\n" ,op1,op2,op3,op4);
+	}else if(op1 == "Halt"){
+		fprintf(output_file,"%s %s %s %s\n" ,op1,op2,op3,op4);
 	}
 	else{
 		fprintf(output_file,"%s %s,%s,%s\n" ,op1,op2,op3,op4);
