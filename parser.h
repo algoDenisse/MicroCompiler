@@ -54,6 +54,7 @@ const char * get_token_name(token t);
 /*---------------Definicion de Rutinas Semanticas------------*/
 
 char *symbols[9];
+int max_temp = 0;
 void start();
 void finish();
 void ident();
@@ -72,8 +73,12 @@ void check_id(string s);
 void enter(string s);
 
 void generate();
-void extract();
+char* extractOP(op_rec p_operand);
+char* extractEXPR(expr_rec p_expr);
 
+expr_rec gen_infix (expr_rec e1, op_rec op, expr_rec e2);
+
+char * get_temp (void);
 void open_outputFile();
 void close_outputFile();
 

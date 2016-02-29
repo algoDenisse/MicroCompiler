@@ -1,4 +1,5 @@
 #include "parser.h"
+#include <string.h>
 //#include "translator.c"
 
 token next_token(void){
@@ -79,6 +80,7 @@ void statement(void){
 			printf("Lo que devuelve el process_id nombre = %s valor = %d tipo = %d\n", result.name, result.val, result.kind);
 			match(ASSIGNOP);
 			expression(&p_expr); // Le mado la direccion de la variable
+			assign(result,p_expr);
 			//AQUI ESTAMOS
 			/*
 
@@ -107,6 +109,18 @@ void statement(void){
 	}
 }
 
+
+void assign (expr_rec result, expr_rec p_expr){
+	//Generate code for assignment
+	char* salida;
+	salida = calloc(1024, sizeof(char)); 
+	strcpy(salida,extractEXPR(p_expr));
+	generate ("Store",salida, result.name,""); 
+}
+
+
+
+
 void id_list(void){
 	/* <id_list> ::= ID{ ,ID}*/
 	match(ID);
@@ -128,7 +142,7 @@ void expression (expr_rec *result){
 		printf("El valor del OPERATOR es %d\n", op.operator);
 		primary (& right_operand);
 		printf("El valor del RIHT operand es nombre = %s  valor = %d tipo = %d\n", right_operand.name, right_operand.val, right_operand.kind);
-		//left_operand = gen_infix (left_operand, op, right_operand);
+		left_operand = gen_infix(left_operand, op, right_operand);
 	}
 	*result = left_operand; 
 }
@@ -300,6 +314,7 @@ void enter(string s){
 }
 
 void generate(string op1,string op2,string op3,string op4){
+	printf("VOY A ESCRIBIRRRR\n");
 	if((op1 == "Declare") || (op1 == "Store")){
 		fprintf(output_file,"%s %s,%s %s\n" ,op1,op2,op3,op4);
 	}
@@ -309,6 +324,75 @@ void generate(string op1,string op2,string op3,string op4){
 
 }
 
-void extract(){
-	
+char* extractOP(op_rec p_operand){
+	printf("VOY A PONER UN OPERATOR\n");
+	char* minus = "Sub";
+	char* plus = "Add";
+	if (p_operand.operator == MINUS){
+		return minus;
+	}else if (p_operand.operator == PLUS){
+		return plus;
+	}
+}
+
+char* extractEXPR(expr_rec p_expr){
+	char* express_buffer;
+	express_buffer = calloc(1024, sizeof(char)); 
+	if (p_expr.kind == IDEXPR){
+		strcpy(express_buffer,p_expr.name); 
+		return express_buffer;
+	}else if (p_expr.kind == LITERALEXPR){  
+		sprintf (express_buffer,"%d",p_expr.val);
+		return express_buffer;
+	}else {
+		strcpy(express_buffer,p_expr.name); 
+		return express_buffer; 
+	}  
+
+}
+
+expr_rec gen_infix (expr_rec e1, op_rec op, expr_rec e2) { 
+	printf("ENTRANDO A GENIFIX\n");
+
+	expr_rec e_rec, e_rec1; 
+	/*An expr_rec with temp variant set.*/ 
+	e_rec.kind = LITERALEXPR; 
+	char* resultadoEXPR2; 
+	resultadoEXPR2 = calloc(1024, sizeof(char));
+	char* resultadoEXPR1; 
+	resultadoEXPR2 = calloc(1024, sizeof(char));
+
+	int resultado; 
+	/* Generate code for infix operation. 
+	Get result temp and set up semantic record for result. */ 
+	if (e1.kind == LITERALEXPR && e2.kind == LITERALEXPR) { 
+		int numero1 = e1.val; 
+		int numero2 = e2.val; 
+		if (op.operator == PLUS) { 
+			resultado = numero1 + numero2; 
+		} else {
+			resultado = numero1 - numero2; 
+		}  
+		e_rec.val = resultado; 
+		return e_rec; 
+	} else { 
+		expr_rec e_rec1; 
+		e_rec1.kind = TEMPEXPR; 
+		resultadoEXPR1 = extractEXPR(e1); 
+		resultadoEXPR2 = extractEXPR(e2); 
+		strncpy(e_rec1.name, get_temp(), MAXIDLEN);
+		generate (extractOP(op),resultadoEXPR1,resultadoEXPR2,e_rec1.name); 
+		return e_rec1; 
+	} 
+}
+
+char * get_temp (void){ 
+/*max temporary allocated so far*/
+	static char tempname[MAXIDLEN]; 
+
+	max_temp++;
+	sprintf(tempname,"Temp&%d", max_temp);
+
+	check_id (tempname);
+	return tempname;
 }
