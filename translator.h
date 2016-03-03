@@ -3,3 +3,6 @@
 #endif
 
 #include <stdio.h>
+FILE *translated_file;
+FILE *mips_file;
+void translate();

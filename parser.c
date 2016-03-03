@@ -331,12 +331,12 @@ void enter(string s){
 void generate(string op1,string op2,string op3,string op4){
 	printf("VOY A ESCRIBIRRRR\n");
 	if((op1 == "Declare") || (op1 == "Store")){
-		fprintf(output_file,"%s %s,%s %s\n" ,op1,op2,op3,op4);
+		fprintf(output_file,"%s %s %s %s\n" ,op1,op2,op3,op4);
 	}else if(op1 == "Halt"){
 		fprintf(output_file,"%s %s %s %s\n" ,op1,op2,op3,op4);
 	}
 	else{
-		fprintf(output_file,"%s %s,%s,%s\n" ,op1,op2,op3,op4);
+		fprintf(output_file,"%s %s %s %s\n" ,op1,op2,op3,op4);
 	}
 
 }

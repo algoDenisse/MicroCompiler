@@ -22,7 +22,7 @@ int main( int argc, char *argv[] )
 	close_file();
 	close_outputFile();
 
-
+	translate();
 	//free(file_buffer);
 	//free(token_buffer);
 
