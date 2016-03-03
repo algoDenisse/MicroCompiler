@@ -7,7 +7,7 @@ void translate(){
     
     // Abrir el translated file generado por el parser con el lenguaje intermedio.
     translated_file = fopen("output_file.txt", "r" );
-    mips_file = fopen ("mips_file.txt","w+"); // file en el cual se guyardaran las instrucciones en MIPS
+    mips_file = fopen ("mips_file.txt","w+"); // file en el cual se guardaran las instrucciones en MIPS
    
     char instruction[8]; //Guardara la instruccion que lea del outputfile. Lo maximo que tendra una instruccion son 8 ch
     char varA[1024]; //Argumentos necesarios en la declaracion de ensamblador de 3 direcciones
@@ -22,12 +22,13 @@ void translate(){
         
         if (strcmp(instruction,"Declare")==0){
             printf("Soy un declare\n");
-            fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del declare
-            fscanf(translated_file, " %1023s",varB);//Obtengo la segunda variable del declare
-            fprintf(mips_file, "    %s: .word 0 \n",varA);
-            
+            fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable (ID) del declare
+            fprintf(mips_file, "    %s: .word 0 \n",varA); // Sera siempre un word porque solo hay integers
             break;
-            }else if (strcmp(instruction,"Add")==0){
+        }else if (strcmp(instruction,"Store")==0){
+            printf("Soy un store\n");
+            break;
+        }else if (strcmp(instruction,"Add")==0){
             printf("Soy un add\n");
             break;
         }else if (strcmp(instruction,"Sub")==0){
