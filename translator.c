@@ -24,25 +24,28 @@ void translate(){
             printf("Soy un declare\n");
             fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable (ID) del declare
             fprintf(mips_file, "    %s: .word 0 \n",varA); // Sera siempre un word porque solo hay integers
-            break;
+            //break;
         }else if (strcmp(instruction,"Store")==0){
             printf("Soy un store\n");
-            break;
+            fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del store
+            fscanf(translated_file, " %1023s",varB);//Obtengo la segunda variable del store
+            fprintf(mips_file, "    lw      %s, %s \n",varA, varB);
+            //break;
         }else if (strcmp(instruction,"Add")==0){
             printf("Soy un add\n");
-            break;
+           // break;
         }else if (strcmp(instruction,"Sub")==0){
             printf("Soy un sub\n");
-            break;
+           // break;
         }else if  (strcmp(instruction,"Read")==0){
             printf("Soy un read\n");
-            break;
+           // break;
         }else if  (strcmp(instruction,"Write")==0){
             printf("Soy un write\n");
-            break;
+//break;
         }else if  (strcmp(instruction,"Halt")==0){
             printf("Soy un halt\n");
-            break;
+           // break;
         }
         // switch(instruction){
         //     case 'Declare':

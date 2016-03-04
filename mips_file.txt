@@ -1,1 +1,5 @@
     A: .word 0 
+    lw      2, A 
+    B: .word 0 
+    Temp&1: .word 0 
+    lw      Temp&1, B 
