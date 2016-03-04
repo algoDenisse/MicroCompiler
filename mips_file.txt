@@ -1,5 +1,8 @@
     A: .word 0 
-    lw      2, A 
+    lw  A, 2 
     B: .word 0 
     Temp&1: .word 0 
-    lw      Temp&1, B 
+    lw  $t1, 3 
+    lw  $t2, A 
+    add $t0, $t1, $t2 
+    lw  B, Temp&1 

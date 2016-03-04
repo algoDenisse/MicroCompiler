@@ -29,10 +29,21 @@ void translate(){
             printf("Soy un store\n");
             fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del store
             fscanf(translated_file, " %1023s",varB);//Obtengo la segunda variable del store
-            fprintf(mips_file, "    lw      %s, %s \n",varA, varB);
+            fprintf(mips_file, "    lw  %s, %s \n",varB, varA);
             //break;
         }else if (strcmp(instruction,"Add")==0){
             printf("Soy un add\n");
+            fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del Add 3
+            fscanf(translated_file, " %1023s",varB);//Obtengo la segunda variable del Add a
+            fscanf(translated_file, " %1023s",varC);//Obtengo la segunda variable del Add temp1
+            // mover los operandos a los registros
+            fprintf(mips_file, "    lw  $t1, %s \n", varA);
+            fprintf(mips_file, "    lw  $t2, %s \n", varB);
+            // realizar la suma
+            fprintf(mips_file, "    add $t0, $t1, $t2 \n");
+            // mover a 
+            
+            
            // break;
         }else if (strcmp(instruction,"Sub")==0){
             printf("Soy un sub\n");
