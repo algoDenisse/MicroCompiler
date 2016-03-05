@@ -1,7 +1,10 @@
+.data
     A: .word 0 
-    lw  A, 2 
     B: .word 0 
     Temp&1: .word 0 
+.text
+    main:
+    lw  A, 2 
     lw  $t1, 3 
     lw  $t2, A 
     add $t0, $t1, $t2 

@@ -8,13 +8,20 @@ void translate(){
     // Abrir el translated file generado por el parser con el lenguaje intermedio.
     translated_file = fopen("output_file.txt", "r" );
     mips_file = fopen ("mips_file.txt","w+"); // file en el cual se guardaran las instrucciones en MIPS
-   
+    //data_file = fopen ("data_file.txt","w+"); 
+    //code_file = fopen ("code_file.txt","w+"); 
+    data_file = tmpfile();
+    code_file = tmpfile();
     char instruction[8]; //Guardara la instruccion que lea del outputfile. Lo maximo que tendra una instruccion son 8 ch
     char varA[1024]; //Argumentos necesarios en la declaracion de ensamblador de 3 direcciones
     char varB[1024];
     char varC[1024];
+    char ch;
+
+
     //Cuando matchee la primera palabra, vea que le llego
     while(fscanf(translated_file, " %8s", instruction)==1){
+
         printf("\n\n");
         fwrite( instruction, 1 ,sizeof(instruction), stdout);
         printf("\n");
@@ -23,13 +30,14 @@ void translate(){
         if (strcmp(instruction,"Declare")==0){
             printf("Soy un declare\n");
             fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable (ID) del declare
-            fprintf(mips_file, "    %s: .word 0 \n",varA); // Sera siempre un word porque solo hay integers
+            fprintf(data_file,"    %s: .word 0 \n",varA); // Sera siempre un word porque solo hay integers
+
             //break;
         }else if (strcmp(instruction,"Store")==0){
             printf("Soy un store\n");
             fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del store
             fscanf(translated_file, " %1023s",varB);//Obtengo la segunda variable del store
-            fprintf(mips_file, "    lw  %s, %s \n",varB, varA);
+            fprintf(code_file, "    lw  %s, %s \n",varB, varA);
             //break;
         }else if (strcmp(instruction,"Add")==0){
             printf("Soy un add\n");
@@ -37,10 +45,10 @@ void translate(){
             fscanf(translated_file, " %1023s",varB);//Obtengo la segunda variable del Add a
             fscanf(translated_file, " %1023s",varC);//Obtengo la segunda variable del Add temp1
             // mover los operandos a los registros
-            fprintf(mips_file, "    lw  $t1, %s \n", varA);
-            fprintf(mips_file, "    lw  $t2, %s \n", varB);
+            fprintf(code_file, "    lw  $t1, %s \n", varA);
+            fprintf(code_file, "    lw  $t2, %s \n", varB);
             // realizar la suma
-            fprintf(mips_file, "    add $t0, $t1, $t2 \n");
+            fprintf(code_file, "    add $t0, $t1, $t2 \n");
             // mover a 
             
             
@@ -79,5 +87,20 @@ void translate(){
         //         break;
         // }
     }
+
+    fseek(data_file,0,SEEK_SET);
+    fseek(code_file,0,SEEK_SET);
+    fprintf(mips_file,".data\n");
+     while( ( ch = getc(data_file) ) != EOF ){
+
+        fputc(ch,mips_file);  
+     }
+     fprintf(mips_file, ".text\n    main:\n");
+     while( ( ch = getc(code_file) ) != EOF ){
+        fputc(ch,mips_file);
+     }
+
+    fclose(data_file);
+    fclose(code_file);
     
 }
