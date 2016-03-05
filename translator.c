@@ -7,7 +7,7 @@ void translate(){
     
     // Abrir el translated file generado por el parser con el lenguaje intermedio.
     translated_file = fopen("output_file.txt", "r" );
-    mips_file = fopen ("mips_file.txt","w+"); // file en el cual se guardaran las instrucciones en MIPS
+    mips_file = fopen ("mips_file.asm","w+"); // file en el cual se guardaran las instrucciones en MIPS
     //data_file = fopen ("data_file.txt","w+"); 
     //code_file = fopen ("code_file.txt","w+"); 
     data_file = tmpfile();
