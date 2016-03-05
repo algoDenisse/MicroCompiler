@@ -87,7 +87,7 @@ void translate(){
             printf("Soy un write\n");
             fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del store
            // fprintf(code_file, "-------------------------------------------------------------------------------------------\n");
-            fprintf (code_file,"    li $v0, 1\n    li $a0, %s\n    syscall\n",varA);   
+            fprintf (code_file,"    li $v0, 1\n    lw $a0, %s \n    syscall \n",varA);   
           
         }else if  (strcmp(instruction,"Halt")==0){
             printf("Soy un halt\n");

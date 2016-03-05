@@ -78,7 +78,7 @@ void statement(void){
 			strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
 			match(ID);
 			result = process_id();
-			printf("Lo que devuelve el process_id nombre = %s valor = %d tipo = %d\n", result.name, result.val, result.kind);
+			//printf("Lo que devuelve el process_id nombre = %s valor = %d tipo = %d\n", result.name, result.val, result.kind);
 			match(ASSIGNOP);
 			expression(&p_expr); // Le mado la direccion de la variable
 			assign(result,p_expr);
@@ -159,12 +159,12 @@ void expression (expr_rec *result){
 	expr_rec left_operand, right_operand;
 	op_rec op;
     primary (&  left_operand);
-    printf("El valor del LEFT operand es nombre = %s  valor = %d tipo = %d\n", left_operand.name, left_operand.val, left_operand.kind);
+   // printf("El valor del LEFT operand es nombre = %s  valor = %d tipo = %d\n", left_operand.name, left_operand.val, left_operand.kind);
 	while (next_token() == PLUSOP || next_token() == MINUSOP){
 		add_op (& op); 
-		printf("El valor del OPERATOR es %d\n", op.operator);
+		//printf("El valor del OPERATOR es %d\n", op.operator);
 		primary (& right_operand);
-		printf("El valor del RIHT operand es nombre = %s  valor = %d tipo = %d\n", right_operand.name, right_operand.val, right_operand.kind);
+		//printf("El valor del RIHT operand es nombre = %s  valor = %d tipo = %d\n", right_operand.name, right_operand.val, right_operand.kind);
 		left_operand = gen_infix(left_operand, op, right_operand);
 	}
 	*result = left_operand; 
@@ -329,7 +329,7 @@ void enter(string s){
 }
 
 void generate(string op1,string op2,string op3,string op4){
-	printf("VOY A ESCRIBIRRRR\n");
+	//printf("VOY A ESCRIBIRRRR\n");
 	if((op1 == "Declare") || (op1 == "Store")){
 		fprintf(output_file,"%s %s %s %s\n" ,op1,op2,op3,op4);
 	}else if(op1 == "Halt"){
@@ -342,7 +342,7 @@ void generate(string op1,string op2,string op3,string op4){
 }
 
 char* extractOP(op_rec p_operand){
-	printf("VOY A PONER UN OPERATOR\n");
+	//printf("VOY A PONER UN OPERATOR\n");
 	char* minus = "Sub";
 	char* plus = "Add";
 	if (p_operand.operator == MINUS){
@@ -369,7 +369,7 @@ char* extractEXPR(expr_rec p_expr){
 }
 
 expr_rec gen_infix (expr_rec e1, op_rec op, expr_rec e2) { 
-	printf("ENTRANDO A GENIFIX\n");
+	//printf("ENTRANDO A GENIFIX\n");
 
 	expr_rec e_rec, e_rec1; 
 	/*An expr_rec with temp variant set.*/ 
@@ -408,7 +408,7 @@ char * get_temp (void){
 	static char tempname[MAXIDLEN]; 
 
 	max_temp++;
-	sprintf(tempname,"Temp&%d", max_temp);
+	sprintf(tempname,"Temp%d", max_temp);
 
 	check_id (tempname);
 	return tempname;

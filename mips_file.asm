@@ -1,16 +1,38 @@
 .data
     A: .word 0 
-    B: .word 0 
-    Temp&1: .word 0 
+    BB: .word 0 
+    CC: .word 0 
+    Temp1: .word 0 
+    Temp2: .word 0 
+    DD: .word 0 
+    Temp3: .word 0 
 .text
     main:
-    li $a0, 2
-    sw $a0, A
-    li $a0, 3
+    li $v0, 5
+    syscall
+    sw $v0, BB
+    li $v0, 5
+    syscall
+    sw $v0, CC
+    li $v0, 5
+    syscall
+    sw $v0, DD
+    lw $a0, BB
+    lw $a1, CC
+    add $v0, $a0, $a1
+    sw $v0, Temp1
+    lw $a0, Temp1
     lw $a1, A
-    sub $v0, $a0, $a1
-    sw $v0, Temp&1
-    lw $a0, Temp&1
-    sw $a0, B
+    add $v0, $a0, $a1
+    sw $v0, Temp2
+    lw $a0, Temp2
+    lw $a1, DD
+    add $v0, $a0, $a1
+    sw $v0, Temp3
+    lw $a0, Temp3
+    sw $a0, A
+    li $v0, 1
+    lw $a0, A 
+    syscall 
     la $v0, 10
     syscall

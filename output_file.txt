@@ -1,7 +1,2 @@
 Declare A Integer 
 Store 2 A 
-Declare B Integer 
-Declare Temp&1 Integer 
-Sub 3 A Temp&1
-Store Temp&1 B 
-Halt   

@@ -1,4 +1,5 @@
-begin
- A := 1 + 1;
- B := 3 - A;
-end
+BEGIN 
+ A:=2
+ B:=3;
+ WRITE(A+B);
+EN
