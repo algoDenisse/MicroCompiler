@@ -30,6 +30,7 @@ void translate(){
         if (strcmp(instruction,"Declare")==0){
             printf("Soy un declare\n");
             fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable (ID) del declare
+            //fprintf(data_file, "-------------------------------------------------------------------------------------------\n");
             fprintf(data_file,"    %s: .word 0 \n",varA); // Sera siempre un word porque solo hay integers
 
             //break;
@@ -37,55 +38,64 @@ void translate(){
             printf("Soy un store\n");
             fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del store
             fscanf(translated_file, " %1023s",varB);//Obtengo la segunda variable del store
-            fprintf(code_file, "    lw  %s, %s \n",varB, varA);
+            //fprintf(code_file, "-------------------------------------------------------------------------------------------\n");
+            if (atoi(varA) != 0) { 
+               fprintf(code_file, "    li $a0, %s\n    sw $a0, %s\n", varA, varB);
+            }else{ 
+                fprintf(code_file, "    lw $a0, %s\n    sw $a0, %s\n", varA, varB);
+            }
+            //fprintf(code_file, "    sw  %s, %s \n",varA, varB);
             //break;
         }else if (strcmp(instruction,"Add")==0){
             printf("Soy un add\n");
             fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del Add 3
             fscanf(translated_file, " %1023s",varB);//Obtengo la segunda variable del Add a
             fscanf(translated_file, " %1023s",varC);//Obtengo la segunda variable del Add temp1
-            // mover los operandos a los registros
-            fprintf(code_file, "    lw  $t1, %s \n", varA);
-            fprintf(code_file, "    lw  $t2, %s \n", varB);
-            // realizar la suma
-            fprintf(code_file, "    add $t0, $t1, $t2 \n");
-            // mover a 
+           // fprintf(code_file, "-------------------------------------------------------------------------------------------\n");
+            if (atoi(varA) != 0 && atoi(varB)) {
+                fprintf(code_file, "    li $a0, %s\n    li $a1, %s\n    add $v0, $a0, $a1\n    sw $v0, %s\n",varA,varB,varC);
+            } else if (atoi(varA) != 0 && !atoi(varB)) {
+                fprintf(code_file, "    li $a0, %s\n    lw $a1, %s\n    add $v0, $a0, $a1\n    sw $v0, %s\n",varA,varB,varC);
+            } else if (!atoi(varA) != 0 && atoi(varB)) {
+                fprintf(code_file, "    lw $a0, %s\n    li $a1, %s\n    add $v0, $a0, $a1\n    sw $v0, %s\n",varA,varB,varC);
+            } else {
+                fprintf(code_file, "    lw $a0, %s\n    lw $a1, %s\n    add $v0, $a0, $a1\n    sw $v0, %s\n",varA,varB,varC);
+            }
             
-            
-           // break;
         }else if (strcmp(instruction,"Sub")==0){
             printf("Soy un sub\n");
-           // break;
+            fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del Add 3
+            fscanf(translated_file, " %1023s",varB);//Obtengo la segunda variable del Add a
+            fscanf(translated_file, " %1023s",varC);//Obtengo la segunda variable del Add temp1
+           // fprintf(code_file, "-------------------------------------------------------------------------------------------\n");
+            if (atoi(varA) != 0 && atoi(varB)) {
+                fprintf(code_file, "    li $a0, %s\n    li $a1, %s\n    sub $v0, $a0, $a1\n    sw $v0, %s\n",varA,varB,varC);
+            } else if (atoi(varA) != 0 && !atoi(varB)) {
+                fprintf(code_file, "    li $a0, %s\n    lw $a1, %s\n    sub $v0, $a0, $a1\n    sw $v0, %s\n",varA,varB,varC);
+            } else if (!atoi(varA) != 0 && atoi(varB)) {
+                fprintf(code_file, "    lw $a0, %s\n    li $a1, %s\n    sub $v0, $a0, $a1\n    sw $v0, %s\n",varA,varB,varC);
+            } else {
+                fprintf(code_file, "    lw $a0, %s\n    lw $a1, %s\n    sub $v0, $a0, $a1\n    sw $v0, %s\n",varA,varB,varC);
+            }
+
         }else if  (strcmp(instruction,"Read")==0){
             printf("Soy un read\n");
-           // break;
+            fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del Add 3
+           // fprintf(code_file, "-------------------------------------------------------------------------------------------\n");
+            fprintf(code_file, "    li $v0, 5\n    syscall\n    sw $v0, %s\n",varA);
         }else if  (strcmp(instruction,"Write")==0){
             printf("Soy un write\n");
-//break;
+            fscanf(translated_file, " %1023s",varA);//Obtengo la primera variable del store
+           // fprintf(code_file, "-------------------------------------------------------------------------------------------\n");
+            fprintf (code_file,"    li $v0, 1\n    li $a0, %s\n    syscall\n",varA);   
+          
         }else if  (strcmp(instruction,"Halt")==0){
             printf("Soy un halt\n");
-           // break;
+            //fprintf(code_file, "-------------------------------------------------------------------------------------------\n");
+            fprintf (code_file,"    la $v0, 10\n    syscall\n" ); 
+            break;
         }
-        // switch(instruction){
-        //     case 'Declare':
-        //         printf("Soy un declare\n");
-        //         break;
-        //     case 'Add':
-        //         printf("Soy un add\n");
-        //         break;
-        //     case 'Sub':
-        //         printf("Soy un sub\n");
-        //         break;
-        //     case 'Read':
-        //         printf("Soy un read\n");
-        //         break;
-        //     case 'Write':
-        //         printf("Soy un write\n");
-        //         break;
-        //     case 'Halt':
-        //         printf("Soy un halt\n");
-        //         break;
-        // }
+     
     }
 
     fseek(data_file,0,SEEK_SET);
