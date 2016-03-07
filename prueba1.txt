@@ -1,5 +1,5 @@
 BEGIN 
  READ(A,B,CC,DD);
- A:=BB+CC+A+DD;
+ A:=B+CC+A+DD;
  WRITE(A);
 END

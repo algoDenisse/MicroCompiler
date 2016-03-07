@@ -1,1 +1,16 @@
-Declare A Integer 
+Read a Integer 
+Read b Integer 
+Declare a Integer 
+Declare Temp1 Integer 
+Add a 12 Temp1
+Write Temp1 Integer 
+Declare b Integer 
+Declare Temp2 Integer 
+Add b 23 Temp2
+Write Temp2 Integer 
+Declare r Integer 
+Declare Temp3 Integer 
+Add r 98 Temp3
+Store Temp3 a 
+Write a Integer 
+Halt   

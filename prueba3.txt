@@ -1,9 +1,0 @@
-BEGIN
-
-read(a,b);
-write((a + 12), (b + 23));
-
-a := r + (100-2);
-
-write(a);
-END
