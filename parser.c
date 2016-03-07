@@ -123,6 +123,7 @@ void id_list(void){
 	strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
 	match(ID);
 	strcpy(result.name, previous_tokenbuffer);
+	read_id(result);
 	while(next_token() == COMMA){
 		strcpy(previous_tokenbuffer, token_buffer); // porque el match me cambia el token buffer
 		match(COMMA);

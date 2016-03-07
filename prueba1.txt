@@ -1,14 +1,5 @@
-BEGIN
-
-
-	write((a + 12), (b + 23));
-	
-
-read(a,b);
-
-
-	a := r + (100-2);
-
-
+BEGIN 
+ READ(A,B,CC,DD);
+ A:=BB+CC+A+DD;
+ WRITE(A);
 END
-
