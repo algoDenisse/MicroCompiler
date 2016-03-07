@@ -1,2 +1,0 @@
-Declare A Integer 
-Store 2 A 

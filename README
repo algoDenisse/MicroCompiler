@@ -4,9 +4,19 @@ Creado por: Dennisse Rojas Casanova  2013001522
 		 	Treicy Sanchez Gutierrez 2013001517
 
 La ejecucion del Compilador para Micro se debe realizar por medio de la Terminal, ejecutando Main.c.
-El programa solicitara el nombre del archivo con el codigo micro que se desea compilar, por defecto es el archivo llamado test.txt.
+El programa solicitara el nombre del archivo con extensión .txt con el codigo micro que se desea compilar, que se encuentre en la 
+misma carpeta del proyecto. Puede utilizarse cualquiera de los archivos de prueba incluidos en esta carpeta.
 
 Si la ejecucion ocurrre sin errores se creara el archivo output_file.txt con el codigo intermedio generado y 
-el archivo mips_file.asm, el cual contiene el codigo ensamblador MIPS equivalente. Posteriormente se requiere el simulador MIPS, SPIM, para su ejecucion.
+el archivo mips_file.asm, el cual contiene el codigo ensamblador MIPS equivalente. Posteriormente se requiere el simulador MIPS, SPIM,
+para su ejecucion, siguiendo los siguientes pasos:
 
+1. Abrir la consola de Linux desde la carpeta del proyecto.
+2. Ejecutar el comando "spim"
+3. Ejecutar el comando Load "nombre_del_archivo.asm" 
+4. Si no hay errores, ejecutar el comando "Run"
+
+Los resultados se mostrarán en pantalla.
+
+No se implementó el ejercicio 10 del libro, la inclusión de condicionales.
 
